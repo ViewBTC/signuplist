@@ -108,14 +108,14 @@ app.get('/verify', function(req, res) {
     var token = req.param('token');
     validatetoken(token, function(suc){
       if(suc) {
-        //res.send('thanks man!');
+        res.send('Email has been confirmed.');
         // add static jade html
-        res.render('index');
+        //res.render('index');
       }
       else {
         res.send('Token not valid');
         // add static jade html
-        res.render('error');
+        //res.render('error');
       }
     })
 
