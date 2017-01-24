@@ -9,6 +9,10 @@ body {
   text-align: center;
 }
 
+.vcenter {
+  image-rendering: -webkit-optimize-contrast;
+}
+
 .container {
 	width: 200px;
 	height: 100px;

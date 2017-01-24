@@ -13,20 +13,22 @@ exports.mail = function(email, token, language) {
   // create reusable transporter object using the default SMTP transport
   var transporter = nodemailer.createTransport('smtps://'+account+':'+password+'@'+host);
 
+  var translation = config.translation[language];
   // setup e-mail data with unicode symbols
   var mailOptions = {
-      from: config.mail.from, // sender address
-      to: email,
-      subject: 'Hello, please verify your email', // Subject line
-      text: token, // plaintext body
-      html: '<b>Click the following link to confirm your account:</b><p><a href="'+HOST+'/verify?token='+token+'">verify me</a></p>' // html body
+    from:     config.mail.from,
+    to:       email,
+    subject:  translation.subject,
+    text:     token,
+    html:     '<b>'+translation.htmlF+'</b><p><a href="'+HOST+'/verify?token='+token+'">'+translation.htmlL+'</a></p>'
   };
 
   // send mail with defined transport object
-  transporter.sendMail(mailOptions, function(error, info){
+  transporter.sendMail(mailOptions, function(error, info) {
       if(error){
-          return console.log(error);
+        return console.log(error);
+      } else {
+        return console.log('Message sent: ' + info.response);
       }
-      console.log('Message sent: ' + info.response);
   });
-}
+};

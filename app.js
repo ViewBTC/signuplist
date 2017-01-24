@@ -4,22 +4,16 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var mailer = require('./models/mail.js')
+var mailer = require('./models/mail.js');
 var crypto = require('crypto');
 var cors = require('cors');
+
 var db = require('./models/database.js');
+var config = require('./config/config.js');
+
+// var tempLanguage = 'en';
+
 var app = express();
-
-
-
-/*
-var mailtext= {
-  "en" :
-    {     "html" : `<b>Click the following link to confirm your account:</b>
-          <p><a href="'+HOST+'/verify?token='+token+'">verify me</a></p>`
-    },
-};
-*/
 
 app.use(express.static('public'));
 
@@ -28,6 +22,7 @@ var users = require('./routes/users');
 
 // view /^0^/ PUGGS engine setup
 app.set('view engine', 'pug');
+
 
 /*---------Cors ----------*/
 app.use(function(req, res, next) {
@@ -38,23 +33,22 @@ app.use(function(req, res, next) {
 
 
 app.get('/verify', function(req, res) {
-    var token = req.param('token');
-    db.validatetoken(token, function(suc){
-      if(suc) {
-        res.render('index',
-                  { title: 'Valid token', message: 'Your token is valid!\nThank you for signing up to our newsletter.'});
-        //res.send('Email has been confirmed.');
-        // add static jade html
-        //res.render('index');
-      }
-      else {
-        res.render('index',
-                  { title: 'Invalid token', message: 'Your token is not valid'});
-        //res.send('Token not valid');
-        // add static jade html
-        //res.render('error');
-      }
-    })
+	// var token = req.param('token');
+  // Might have to use a global variable to store
+  // look up or ask
+  // var language = req.param('language');
+	//var translation = config.translation[tempLanguage];
+
+
+  db.validatetoken(token, function(suc) {
+    if(suc) {
+      res.render('index',
+                { title:translation.titleY, message:translation.messageY});
+    } else {
+      res.render('index',
+                { title:translation.titleN, message:translation.messageN});
+    }
+  });
 });
 
 
@@ -77,19 +71,27 @@ app.get('/signup', function (req, res) {
   var token = crypto.createHash('sha1').update(email + random).digest('hex');
 
   if (validateEmail(email)) {
+
+    //language failsafe
+    if (language == null) {
+      language = 'en';
+    }
+
     // Add user to database
-    db.adduser(email, firstname, lastname, token, etp_address, language, function(err,suc){
+    db.adduser(email, firstname, lastname, token, etp_address, language, function(err,suc) {
       if (err) {
-          res.json({"success": false, "message" : "EMAIL_EXISTS"});
+      	res.json({"success": false, "message" : "EMAIL_EXISTS"});
       } else {
         // Send user email, after validate email address
         mailer.mail(email, token, language);
         res.json({"success": true});
       }
     });
+
   } else {
     // do somthing
     res.json({"success": false, "message": "EMAIL_INVALID"});
+
   }
 });
 
