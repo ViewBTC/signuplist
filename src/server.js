@@ -44,7 +44,7 @@ app.get('/init', function(req, res) {
     });
 });
 
-app.get('/list', function(req, res) {
+app.get('/list.csv', function(req, res) {
     let token = req.query.token
 
     if (token && token == process.env.LIST_TOKEN) {
