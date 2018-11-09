@@ -23,5 +23,6 @@ services:
             - EMAIL_USER=no-reply@mvs.org
             - EMAIL_PASS=DANGERZONE
             - BASE_URL=http://localhost
+            - LIST_TOKEN=THISMUSTBESECRET
         links:
             - db

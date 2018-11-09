@@ -38,6 +38,10 @@ exports.adduser = function(email, firstname, lastname, token, etp_address, langu
     });
 }
 
+exports.getUsers = function(callback){
+    connection.query('SELECT email, firstname, lastname, etp_address, language, status FROM `signups`;', callback);
+}
+
 // Validate token & if email has already been verified
 exports.validatetoken = function(token, callback) {
     connection.query('SELECT * FROM `signups` WHERE `token` = ? AND status = "unverified";', [token], function(err, rows, fields) {

@@ -22,8 +22,7 @@ var translation = {};
 
 translation.en = {
     subject: 'Hello, please verify your email',
-    htmlF: 'Click the following link to confirm your account:',
-    htmlL: 'verify me',
+    mail: (firstname, url) => `<h2>Hello ${firstname},</h2><p>thank you for signing up to our newsletter! Please confirm your email by clicking <a  href="${url}">here</a> or copy and paste this link ${url} to your browser.</p><p>We will provide weekly updates on our tech and marketing progress, as well as preview any meetups and events we will be attending.</p><p><b>Welcome to the New Reality! Best regards, The Metaverse Team<b></p>`,
     titleY: 'Valid token',
     messageY: 'Thank you for signing up to our newsletter.',
     titleN: 'Invalid token',
@@ -32,8 +31,7 @@ translation.en = {
 
 translation.zh = {
     subject: ' 您好请核实您的电子邮件。 ',
-    htmlF: '点击以下链接确认您的帐户',
-    htmlL: '验证了我',
+    mail: (firstname, url) => `<h2>您好 ${firstname}，</h2><p>感谢您注册我们的时事通讯！请点击此处<a href="${url}">链接</a> 确认您的电子邮件，或将此链接 ${url} 复制并粘贴到您的浏览器。</p><p>每周，元界将提供有关我们的技术和营销进展的最新信息，并可以提前了解到我们将参加的聚会和活动信息。</p><p><b>Welcome to the New Reality！最诚挚的问候，Metaverse团队</b></p>`,
     titleY: '有效的令牌',
     messageY: '感谢您报名参加我们的时事通讯。 ',
     titleN: '无效的标记',

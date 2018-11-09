@@ -1,4 +1,6 @@
 var express = require('express')
+var csv = require('csv-express')
+
 var path = require('path')
 var favicon = require('serve-favicon')
 var logger = require('morgan')
@@ -31,7 +33,33 @@ app.use(function(req, res, next) {
 });
 
 app.get('/init', function(req, res) {
-    db.init(console.log);
+    db.init((err) => {
+        if (err) res.status(400).json({
+            success: 0,
+            message: 'error initializing db'
+        })
+        else res.status(200).json({
+            success: 1
+        })
+    });
+});
+
+app.get('/list', function(req, res) {
+    let token = req.query.token
+
+    if (token && token == process.env.LIST_TOKEN) {
+        db.getUsers((err, list, fields) => {
+            if (err) {
+                console.error(err)
+                res.status(400).send('error');
+            } else {
+                res.csv(list);
+            }
+        })
+    } else {
+        console.info('invalid auth token ' + token)
+        res.status(400).send('invalid auth. incident reported.');
+    }
 });
 
 app.get('/verify', function(req, res) {
@@ -92,7 +120,7 @@ app.get('/signup', function(req, res) {
                 });
             } else {
                 // Send user email, after validate email address
-                mailer.mail(email, token, language);
+                mailer.mail(firstname, email, token, language);
                 res.json({
                     "success": true
                 });
