@@ -1,0 +1,27 @@
+version: '2'
+
+services:
+    db:
+        image: mysql
+        environment:
+            - MYSQL_ROOT_PASSWORD=SUPERSECRET
+            - MYSQL_DATABASE=signup
+        volumes:
+          - ./files/db:/var/lib/mysql
+    api:
+        build: ./src
+        restart: always
+        ports:
+          - 80:80
+        environment:
+            - MYSQL_HOST=db
+            - MYSQL_PORT=3306
+            - MYSQL_USER=root
+            - MYSQL_NAME=signup
+            - MYSQL_PASS=SUPERSECRET
+            - EMAIL_HOST=smtp.exmail.qq.com
+            - EMAIL_USER=no-reply@mvs.org
+            - EMAIL_PASS=DANGERZONE
+            - BASE_URL=http://localhost
+        links:
+            - db
